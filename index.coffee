@@ -19,22 +19,27 @@ app.directive 'img',($state,$rootScope)->
     unless $rootScope.$storage.narou.artwork
       element.parent().replaceWith '<del>＜非表示にされた挿絵＞</del>'
 
-app.run ($rootScope,$localStorage,$window,$timeout,$state)->
-  $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
-  $rootScope.read= (page)->
-    page= page.replace /^(https?:\/\/)?ncode.syosetu.com\//,''
-    page= page.replace /^(https?:\/\/)?novel18.syosetu.com\//,''
-    page= page.replace $window.location.origin+'/#/',''
-    [id,page]= page.split '/' 
+app.run ($rootScope,$window,$timeout,$state)->
+  saveScroll= null
 
-    $state.go 'root.novel.page',{id,page},{reload:yes}
+  timeout= null
+  $window.addEventListener 'scroll',->
+    return if saveScroll is off
+    $timeout.cancel timeout
+
+    timeout= $timeout ->
+      $state.params.scrollX= $window.scrollX
+      $state.go $state.current.name,$state.params
+    ,50
 
   em= 24
   lineHeight= 1.5
   $rootScope.$on '$viewContentLoaded',->
+    saveScroll= null
     if $state.params.id
       $rootScope.$storage.narou.page= $state.params.id
       $rootScope.$storage.narou.page+= '/'+$state.params.page
+      $rootScope.$storage.narou.page+= '/'+$state.params.scrollX if $state.params.scrollX
     
     $timeout ->
       # http://stackoverflow.com/questions/15195209/how-to-get-font-size-in-html
@@ -42,22 +47,31 @@ app.run ($rootScope,$localStorage,$window,$timeout,$state)->
       if contents
         em= parseInt $window.getComputedStyle(document.querySelector('#novel_honbun'),null).getPropertyValue 'font-size'
         
-      $window.scroll 99999,0
+      $window.scroll $state.params.scrollX,0
 
   $window.addEventListener 'keydown',(event)->
     next= ->
+      saveScroll= off
+      $state.params.scrollX= 99999
       $state.params.page++
       $state.go $state.current.name,$state.params,{reload:yes}
     prev= ->
       return if $state.params.page < 2
+      saveScroll= off
+      $state.params.scrollX= 99999
       $state.params.page--
       $state.go $state.current.name,$state.params,{reload:yes}
-    enter= ->
+    enter= (left=yes)->
       i= 0
       nextLineWidth= em*lineHeight
       tick= ->
         i+= 2
-        $window.scroll $window.scrollX - 2,0
+
+        if left
+          $window.scroll $window.scrollX + 2,0
+        else
+          $window.scroll $window.scrollX - 2,0
+
         $timeout tick if i < nextLineWidth
 
       $timeout tick
@@ -72,7 +86,21 @@ app.run ($rootScope,$localStorage,$window,$timeout,$state)->
       # x
       when 88 then prev()
 
-      else enter()
+      # shift
+      when 16 then null
+
+      else enter event.shiftKey
+
+app.run ($rootScope,$localStorage,$window,$timeout,$state)->
+  $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
+  $rootScope.read= (page)->
+    page= page.replace /^(https?:\/\/)?ncode.syosetu.com\//,''
+    page= page.replace /^(https?:\/\/)?novel18.syosetu.com\//,''
+    page= page.replace $window.location.origin+'/#/',''
+    [id,page,scrollX]= page.split '/' 
+    scrollX= 99999 unless scrollX
+
+    $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
 
 app.config ($urlRouterProvider)->
   $urlRouterProvider.when '','/'
@@ -94,7 +122,7 @@ app.config ($stateProvider)->
       $state.go 'root.novel.page',{id,page},{reload:yes}
 
   $stateProvider.state 'root.novel.page',
-    url: '/:page'
+    url: '/:page?scrollX'
     templateProvider: ($q,$stateParams,$http,$rootScope,$window,toastr)->
       {id,page}= $stateParams
       page?= 1
@@ -102,8 +130,6 @@ app.config ($stateProvider)->
       api= $window.location.origin+'/scrape/'
       url= appDomain+id+'/'+page
       uri= api+url
-
-      console.log 
 
       $http.get uri
       .then (result)->
