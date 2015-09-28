@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    title(ng-bind="title + 'narou.berabou.me'") DifficultHTTPServer
+    script(src=process.env.NODE_ENV=='production'? 'pkgs.min.js': 'pkgs.js')
+    script(src="index.js")
+    link(href="index.css" rel="stylesheet")
+  body
+    div(ui-view)
+    
+    script(id="root.html" type="text/ng-template")
+      div(ui-view)
+        form(ng-submit='read($storage.narou.page)')
+          h1 narou.berabou.me
+          p 「<a href="http://syosetu.com/">小説家になろう</a>」の小説ページを縦読みに変換します
+
+          input(ng-model='$storage.narou.page' placeholder='http://ncode.syosetu.com/n9669bk/' autofocus)
+          .divide
+            label
+              input(ng-model="$storage.narou.artwork" type="checkbox")
+              | 挿絵を表示
+            button 入力したURLの小説を読む
+
+          footer
+            p Firefox,InternetExplorerは動作対象外です。
+            p
+              a(href='http://www.apple.com/jp/safari/')
+                img(src='https://raw.githubusercontent.com/alrra/browser-logos/master/safari/safari_24x24.png' alt='safari')
+              a(href='https://google.co.jp/chrome/')
+                img(src='https://raw.githubusercontent.com/alrra/browser-logos/master/chrome/chrome_24x24.png' alt='chrome')
+              a(href='http://opera.com/ja')
+                img(src='https://raw.githubusercontent.com/alrra/browser-logos/master/opera/opera_24x24.png' alt='opera')
+              a(href='https://vivaldi.com/')
+                img(src='https://raw.githubusercontent.com/alrra/browser-logos/master/vivaldi/vivaldi_24x24.png' alt='vivaldi')
+            
+            cite: a(href="https://github.com/59naga/narou.berabou.me") fork me on github

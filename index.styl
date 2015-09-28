@@ -1,0 +1,192 @@
+meyer-reset()
+
+// Functions
+writing-mode(mode=vertical-rl)
+  -webkit-writing-mode mode
+  -moz-writing-mode mode
+  -ms-writing-mode mode
+  -o-writing-mode mode
+  writing-mode mode
+  
+  line-height 1.5
+
+// ngAnimate setting
+html
+body
+  height 100%
+  position relative
+[ui-view]
+  absolute 0 0 0 false
+  z-index 500
+  
+  &.ng-enter
+    animation fadeIn .5s
+  &.ng-leave
+    animation fadeOut .5s
+
+// Disable
+#pageTop
+#novel_attention
+.adsbyimob
+.novel_bn
+  display none
+
+// Font
+body
+input
+button
+  font-family "游明朝体","YuMincho",serif
+
+h1
+  font-size xx-large
+p
+button
+  font-size x-small
+input
+  font-size medium
+label
+  font-size small
+.contents1
+  font-size small
+.chapter_title
+  font-size medium
+.novel_subtitle
+  font-size x-large
+.novel_bn
+  font-size small
+#novel_no
+  font-size large
+  opacity .25
+#novel_p
+#novel_a
+  opacity .5
+#novel_footer
+  font-size xx-small
+  
+// Layouts
+.divide
+  display flex
+  >*
+    flex 1
+
+// index
+form
+  box-sizing-reset()
+  
+  fixed 0 0 0 0
+  margin auto
+  width 20em
+  height 14em
+  p
+    margin-top .25em
+    margin-bottom 1em
+  input
+    display block
+    width 100%
+    margin 0
+  label
+    display block
+    text-align center
+    padding .5em 0
+    input
+      display inline
+      width 1em
+  button
+    display block
+    margin-left auto
+    margin-right 0
+  footer
+    opacity .75
+    margin-top 1em
+    text-align center
+    a
+      font-size 0
+    cite
+      display block
+      text-align right
+      a
+        color black
+        font-size x-small
+
+// center center
+#novel_color
+  writing-mode()
+  
+  font-size x-large
+  
+  box-sizing-reset()
+  padding 3em 5em
+  
+  img
+    height 100%
+  del
+    text-decoration none
+    opacity .5
+
+// center right
+#novel_p
+  border-left 1px solid gray
+  margin-left 1em
+  padding-left 1em
+  
+// center left
+#novel_a
+  border-right 1px solid gray
+  margin-right 1em
+  padding-right 1em
+  
+// top left
+.novel_bn:last-child
+  writing-mode(horizontal-tb)
+  
+  display block
+  fixed .5em false false .5em
+  padding-left 3em
+  
+  a
+    margin-right .5em
+
+// top center
+#novel_no
+  writing-mode(horizontal-tb)
+  
+  display inline-block
+  fixed .5em .5em false .5em
+  text-align center
+
+// top right
+#novel_footer
+  fixed .5em .5em false 70%
+  
+  margin-top .25em
+  line-height 1.5
+  
+  text-align right
+  *
+    display inline-block
+
+// bottom left
+.chapter_title
+  writing-mode(horizontal-tb)
+  
+  absolute -1.25em false false 0
+  text-align left
+  display inline-block
+.novel_subtitle
+  writing-mode(horizontal-tb)
+  
+  fixed false 50% .25em .25em
+  overflow ellipsis
+
+// bottom right
+.contents1
+  fixed false .5em .5em .5em
+  
+  text-align right
+  a:first-of-type
+    width 50%
+    margin .25em 0
+    margin-left auto
+    margin-right .25em
+    display block
+    overflow ellipsis
