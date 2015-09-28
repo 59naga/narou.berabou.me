@@ -54,6 +54,8 @@ app.run ($rootScope,$window,$timeout,$state)->
       $window.scroll $state.params.scrollX,0
 
   $window.addEventListener 'keydown',(event)->
+    event.preventDefault()
+
     next= ->
       saveScroll= off
       $state.params.scrollX= 99999
@@ -80,20 +82,12 @@ app.run ($rootScope,$window,$timeout,$state)->
 
       $timeout tick
 
-    switch event.keyCode
-      # j
-      when 74 then next()
-      # z
-      when 90 then next()
-      # k
-      when 75 then prev()
-      # x
-      when 88 then prev()
+    return if event.keyCode in [27,16,17,18,91] # esc,tab,control,shift,option,command
+    return next() if event.keyCode in [74,90] # j,z
+    return prev() if event.keyCode in [75,88] # k,x
 
-      # shift
-      when 16 then null
-
-      else enter event.shiftKey
+    # default left scroll for vertical 1 line
+    enter event.shiftKey or event.keyCode is 39# →
 
 app.run ($rootScope,$localStorage,$window,$timeout,$state)->
   $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
@@ -115,10 +109,16 @@ app.config ($stateProvider)->
     url: '/'
     templateUrl: 'root.html'
 
+app.config ($stateProvider)->
+  $stateProvider.state 'unavailable',
+    url: '/unavailable'
+    templateUrl: 'unavailable.html'
+
   $stateProvider.state 'root.novel',
     url: ':id'
     template: '<div ui-view></div>'
-    controller: ($state,$location)->
+    controller: ($state,$window,$location)->
+      return $state.go 'unavailable' if $window.navigator.userAgent.match /(MSIE|Firefox)/
       return unless $state.current.name is 'root.novel'
 
       {id}= $state.params
@@ -155,7 +155,7 @@ app.config ($stateProvider)->
 
             # re-sort next/prev navigator
             if page.length
-              btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"'})"
+              btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:99999})"
               if ~~page > ~~$stateParams.page
                 btn.textContent= '＜次のページ(j)'
               else
