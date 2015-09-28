@@ -24,23 +24,27 @@ app.run ($rootScope,$window,$timeout,$state)->
 
   timeout= null
   $window.addEventListener 'scroll',->
+    return unless $state.current.name is 'root.novel.page'
     return if saveScroll is off
     $timeout.cancel timeout
 
     timeout= $timeout ->
       $state.params.scrollX= $window.scrollX
+      remind $state.params
+
       $state.go $state.current.name,$state.params
     ,50
 
   em= 24
   lineHeight= 1.5
+  remind= ({id,page,scrollX})->
+    $rootScope.$storage.narou.page= id
+    $rootScope.$storage.narou.page+= '/'+page
+    $rootScope.$storage.narou.page+= '/'+scrollX if scrollX
+    
   $rootScope.$on '$viewContentLoaded',->
     saveScroll= null
-    if $state.params.id
-      $rootScope.$storage.narou.page= $state.params.id
-      $rootScope.$storage.narou.page+= '/'+$state.params.page
-      $rootScope.$storage.narou.page+= '/'+$state.params.scrollX if $state.params.scrollX
-    
+
     $timeout ->
       # http://stackoverflow.com/questions/15195209/how-to-get-font-size-in-html
       contents= document.querySelector '#novel_honbun'
@@ -97,7 +101,8 @@ app.run ($rootScope,$localStorage,$window,$timeout,$state)->
     page= page.replace /^(https?:\/\/)?ncode.syosetu.com\//,''
     page= page.replace /^(https?:\/\/)?novel18.syosetu.com\//,''
     page= page.replace $window.location.origin+'/#/',''
-    [id,page,scrollX]= page.split '/' 
+    [id,page,scrollX]= page.split '/'
+    page= 1 unless page
     scrollX= 99999 unless scrollX
 
     $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
@@ -118,14 +123,15 @@ app.config ($stateProvider)->
 
       {id}= $state.params
       page= $location.search().page ? 1
+      scrollX= 99999
 
-      $state.go 'root.novel.page',{id,page},{reload:yes}
+      $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
 
   $stateProvider.state 'root.novel.page',
     url: '/:page?scrollX'
     templateProvider: ($q,$stateParams,$http,$rootScope,$window,toastr)->
       {id,page}= $stateParams
-      page?= 1
+      page= 1 unless page
 
       api= $window.location.origin+'/scrape/'
       url= appDomain+id+'/'+page

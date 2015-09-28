@@ -11,6 +11,6 @@
   "main": "server.coffee",
   "scripts": {
     "postinstall": "bower install",
-    "start": "NODE_ENV=production coffee server.coffee"
+    "start": "coffee server.coffee"
   }
 }
