@@ -15,20 +15,19 @@ app= angular.module appName,appDependencies
 
 app.directive 'img',($state,$rootScope)->
   (scope,element)->
-    return unless $state.current.name is 'root.view'
+    return unless $state.current.name is 'root.novel.page'
     unless $rootScope.$storage.narou.artwork
       element.parent().replaceWith '<del>＜非表示にされた挿絵＞</del>'
 
 app.run ($rootScope,$localStorage,$window,$timeout,$state)->
   $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
   $rootScope.read= (page)->
-    page= page.replace /^https?:\/\//,''
-    page= page.replace /^ncode.syosetu.com\//,''
-    page= page.replace /^novel18.syosetu.com\//,''
+    page= page.replace /^(https?:\/\/)?ncode.syosetu.com\//,''
+    page= page.replace /^(https?:\/\/)?novel18.syosetu.com\//,''
+    page= page.replace $window.location.origin+'/#/',''
     [id,page]= page.split '/' 
-    page= 1 unless page
 
-    $state.go 'root.view',{id,page},{reload:yes}
+    $state.go 'root.novel.page',{id,page},{reload:yes}
 
   em= 24
   lineHeight= 1.5
@@ -83,8 +82,19 @@ app.config ($stateProvider)->
     url: '/'
     templateUrl: 'root.html'
 
-  $stateProvider.state 'root.view',
-    url: ':id?page'
+  $stateProvider.state 'root.novel',
+    url: ':id'
+    template: '<div ui-view></div>'
+    controller: ($state,$location)->
+      return unless $state.current.name is 'root.novel'
+
+      {id}= $state.params
+      page= $location.search().page ? 1
+
+      $state.go 'root.novel.page',{id,page},{reload:yes}
+
+  $stateProvider.state 'root.novel.page',
+    url: '/:page'
     templateProvider: ($q,$stateParams,$http,$rootScope,$window,toastr)->
       {id,page}= $stateParams
       page?= 1
@@ -113,7 +123,7 @@ app.config ($stateProvider)->
 
             # re-sort next/prev navigator
             if page.length
-              btn.setAttribute 'ui-sref',"root.view({id:'"+id+"',page:'"+page+"'})"
+              btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"'})"
               if ~~page > ~~$stateParams.page
                 btn.textContent= '＜次のページ(j)'
               else
@@ -126,7 +136,7 @@ app.config ($stateProvider)->
           # Add top button
           topButton= document.createElement 'a'
           topButton.textContent= '∧'
-          topButton.setAttribute 'ui-sref','^'
+          topButton.setAttribute 'ui-sref','root'
           btns.appendChild topButton
 
         # relative to absolute url
