@@ -54,8 +54,6 @@ app.run ($rootScope,$window,$timeout,$state)->
       $window.scroll $state.params.scrollX,0
 
   $window.addEventListener 'keydown',(event)->
-    event.preventDefault()
-
     next= ->
       saveScroll= off
       $state.params.scrollX= 99999
@@ -82,12 +80,12 @@ app.run ($rootScope,$window,$timeout,$state)->
 
       $timeout tick
 
-    return if event.keyCode in [27,16,17,18,91] # esc,tab,control,shift,option,command
+    return if event.keyCode in [27,16,17,18,91,37,39] # esc,tab,control,shift,option,command,←,→
     return next() if event.keyCode in [74,90] # j,z
     return prev() if event.keyCode in [75,88] # k,x
-
+    
     # default left scroll for vertical 1 line
-    enter event.shiftKey or event.keyCode is 39# →
+    enter event.shiftKey
 
 app.run ($rootScope,$localStorage,$window,$timeout,$state)->
   $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
