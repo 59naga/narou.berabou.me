@@ -131,7 +131,7 @@ app.config ($stateProvider)->
     url: ':id'
     template: '<div ui-view></div>'
     controller: ($state,$window,$location)->
-      return $state.go 'unavailable' if $window.navigator.userAgent.match /(MSIE|Firefox)/
+      return $state.go 'unavailable' if $window.navigator.userAgent.match /(MSIE)/
       return unless $state.current.name is 'root.novel'
 
       {id}= $state.params
