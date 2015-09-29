@@ -100,7 +100,8 @@ app.run ($rootScope,$window,$timeout,$state)->
 
       $timeout tick
 
-    return if event.shiftKey
+    return if event.altKey
+    return if event.ctrlKey
     return if event.metaKey
     return if event.keyCode in [27,16,17,18,91,37,39] # esc,tab,control,shift,option,command,←,→
     return next() if event.keyCode in [74,90] # j,z
