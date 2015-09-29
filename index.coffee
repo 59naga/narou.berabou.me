@@ -22,6 +22,41 @@ app.directive 'img',($state,$rootScope)->
 app.run ($rootScope,$window,$timeout,$state)->
   saveScroll= null
 
+  em= 24
+  lineHeight= 1.5
+  remind= ({id,page,scrollX})->
+    $rootScope.$storage.narou.page= id
+    $rootScope.$storage.narou.page+= '/'+page
+    $rootScope.$storage.narou.page+= '/'+scrollX if scrollX
+  
+  $rootScope.$on '$stateChangeStart',->
+    saveScroll= off
+
+  $rootScope.$on '$viewContentLoaded',->
+    saveScroll= null
+
+    $timeout ->
+      # http://stackoverflow.com/questions/15195209/how-to-get-font-size-in-html
+      contents= document.querySelector '#novel_honbun'
+      if contents
+        em= parseInt $window.getComputedStyle(document.querySelector('#novel_honbun'),null).getPropertyValue 'font-size'
+        
+      # <title>
+      main= document.querySelector 'main'
+      title= main.querySelector('.contents1 a')?.textContent
+      subtitle= (main.querySelector '.novel_subtitle')?.textContent
+      chapterTitle= (main.querySelector '.chapter_title')?.textContent
+
+      $rootScope.title= ''
+      if $state.current.name is 'root.novel.page'
+        $rootScope.title+= subtitle+ ' ' if subtitle
+        $rootScope.title+= chapterTitle if chapterTitle
+        $rootScope.title+= ' / ' if $rootScope.title
+        $rootScope.title+= title if title
+        $rootScope.title+= ' powered by ' if $rootScope.title
+        
+      $window.scroll $state.params.scrollX,0
+
   timeout= null
   $window.addEventListener 'scroll',->
     return unless $state.current.name is 'root.novel.page'
@@ -32,36 +67,16 @@ app.run ($rootScope,$window,$timeout,$state)->
       $state.params.scrollX= $window.scrollX
       remind $state.params
 
-      $state.go $state.current.name,$state.params
+      $state.go $state.current.name,$state.params,{location:'replace'}
     ,50
-
-  em= 24
-  lineHeight= 1.5
-  remind= ({id,page,scrollX})->
-    $rootScope.$storage.narou.page= id
-    $rootScope.$storage.narou.page+= '/'+page
-    $rootScope.$storage.narou.page+= '/'+scrollX if scrollX
-    
-  $rootScope.$on '$viewContentLoaded',->
-    saveScroll= null
-
-    $timeout ->
-      # http://stackoverflow.com/questions/15195209/how-to-get-font-size-in-html
-      contents= document.querySelector '#novel_honbun'
-      if contents
-        em= parseInt $window.getComputedStyle(document.querySelector('#novel_honbun'),null).getPropertyValue 'font-size'
-        
-      $window.scroll $state.params.scrollX,0
 
   $window.addEventListener 'keydown',(event)->
     next= ->
-      saveScroll= off
       $state.params.scrollX= 99999
       $state.params.page++
       $state.go $state.current.name,$state.params,{reload:yes}
     prev= ->
       return if $state.params.page < 2
-      saveScroll= off
       $state.params.scrollX= 99999
       $state.params.page--
       $state.go $state.current.name,$state.params,{reload:yes}
@@ -172,18 +187,6 @@ app.config ($stateProvider)->
         # relative to absolute url
         toc= div.querySelector '.contents1 a'
         toc?.setAttribute 'href',appDomain.slice(0,-1)+(toc.getAttribute 'href')
-
-        # <title>
-        title= toc.textContent
-        subtitle= (div.querySelector '.novel_subtitle').textContent
-        chapterTitle= (div.querySelector '.chapter_title')?.textContent
-
-        $rootScope.title= ''
-        $rootScope.title+= subtitle+ ' ' if subtitle
-        $rootScope.title+= chapterTitle if chapterTitle
-        $rootScope.title+= ' / ' if $rootScope.title
-        $rootScope.title+= title if title
-        $rootScope.title+= ' powered by '
 
         contents.innerHTML
 
