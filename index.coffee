@@ -19,6 +19,11 @@ app.directive 'img',($state,$rootScope)->
     unless $rootScope.$storage.narou.artwork
       element.parent().replaceWith '<del>＜非表示にされた挿絵＞</del>'
 
+app.run ($window)->
+  # http://stackoverflow.com/questions/22564167/window-location-origin-gives-wrong-path-when-using-ie
+  $window.location.origin?=
+    location.protocol+"//"+location.hostname+(if location.port then ':' + location.port else '')
+
 app.run ($rootScope,$window,$timeout,$state)->
   saveScroll= null
 
@@ -64,7 +69,7 @@ app.run ($rootScope,$window,$timeout,$state)->
     $timeout.cancel timeout
 
     timeout= $timeout ->
-      $state.params.scrollX= $window.scrollX
+      $state.params.scrollX= $window.scrollX ? $window.pageXOffset
       remind $state.params
 
       $state.go $state.current.name,$state.params,{location:'replace'}
@@ -87,14 +92,16 @@ app.run ($rootScope,$window,$timeout,$state)->
         i+= 2
 
         if left
-          $window.scroll $window.scrollX + 2,0
+          $window.scrollBy +2,0
         else
-          $window.scroll $window.scrollX - 2,0
+          $window.scrollBy -2,0
 
         $timeout tick if i < nextLineWidth
 
       $timeout tick
 
+    return if event.shiftKey
+    return if event.metaKey
     return if event.keyCode in [27,16,17,18,91,37,39] # esc,tab,control,shift,option,command,←,→
     return next() if event.keyCode in [74,90] # j,z
     return prev() if event.keyCode in [75,88] # k,x
@@ -123,15 +130,10 @@ app.config ($stateProvider)->
     templateUrl: 'root.html'
 
 app.config ($stateProvider)->
-  $stateProvider.state 'unavailable',
-    url: '/unavailable'
-    templateUrl: 'unavailable.html'
-
   $stateProvider.state 'root.novel',
     url: ':id'
     template: '<div ui-view></div>'
     controller: ($state,$window,$location)->
-      return $state.go 'unavailable' if $window.navigator.userAgent.match /(MSIE)/
       return unless $state.current.name is 'root.novel'
 
       {id}= $state.params
@@ -191,7 +193,7 @@ app.config ($stateProvider)->
         contents.innerHTML
 
       .catch (error)->
-        html= error.data?.match(/\<body.+?\>([\s\S]+?)<\/body>/)[1]
+        html= error.data?.match(/\<body.+?\>([\s\S]+?)<\/body>/)?[1]
         div= document.createElement 'div'
         div.innerHTML= html
         contents= div.querySelector '#container .description'
