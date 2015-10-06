@@ -93,6 +93,8 @@ form
   box-sizing-reset()
   
   fixed 0 0 0 0
+  z-index 5
+  
   margin auto
   width 20em
   height 14em
@@ -173,6 +175,7 @@ form
   display block
   height 1em
   fixed .5em false false .5em
+  z-index 5
   padding-left 3em
   
   a
@@ -184,11 +187,13 @@ form
   
   display inline-block
   fixed .5em .5em false .5em
+  z-index 5
   text-align center
 
 // top right
 #novel_footer
   fixed .5em .5em false 70%
+  z-index 5
   
   margin-top .25em
   line-height 1.5
@@ -208,11 +213,23 @@ form
   writing-mode(horizontal-tb)
   
   fixed false 50% .25em .25em
+  z-index 5
   overflow ellipsis
+
+// bottom center
+.apology
+  writing-mode(horizontal-tb)
+  
+  display inline-block
+  font-size x-small
+  fixed false .5em .5em .5em
+  text-align center
+  opacity .75
 
 // bottom right
 .contents1
   fixed false .5em .5em .5em
+  z-index 5
   
   text-align right
   a:first-of-type

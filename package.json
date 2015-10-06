@@ -2,7 +2,7 @@
   "name": "narou.berabou.me",
   "dependencies": {
     "bluebird": "^2.10.1",
-    "difficult-http-server": "0.0.3",
+    "difficult-http-server": "0.0.7",
     "express": "^4.13.3",
     "request": "^2.64.0"
   },

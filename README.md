@@ -24,6 +24,10 @@ npm start
 
 とすることで、`http://localhost:59798`上に、開発環境を起動できます。
 
+# 謝辞
+
+このアプリケーションは非公式のもので、[株式会社ヒナプロジェクト](http://hinaproject.co.jp/)が提供しているものではありません。
+
 License
 ---
 [MIT][License]

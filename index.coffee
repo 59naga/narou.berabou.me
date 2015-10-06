@@ -191,6 +191,9 @@ app.config ($stateProvider)->
         toc= div.querySelector '.contents1 a'
         toc?.setAttribute 'href',appDomain.slice(0,-1)+(toc.getAttribute 'href')
 
+        # .apology
+        contents.innerHTML+= '<div class="apology">このWEBサービスは非公式です。<br>株式会社ヒナプロジェクト様が提供しているものではありません。</div>' 
+
         contents.innerHTML
 
       .catch (error)->
