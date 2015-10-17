@@ -176,7 +176,7 @@ app.config ($stateProvider)->
                 btn.textContent= '＜次のページ(j)'
               else
                 btn.textContent= '前のページ(k)＞'
-                btn.parentNode.insertBefore btn.nextSibling,btn
+                btn.parentNode.insertBefore btn.nextSibling,btn if btn.nextSibling?
 
             else
               btn.parentNode.removeChild btn
