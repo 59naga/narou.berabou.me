@@ -2,7 +2,7 @@
 express= require 'express'
 dhs= require 'difficult-http-server'
 bluebird= require 'bluebird'
-request= bluebird.promisify(require 'request')
+request= bluebird.promisify((require 'request'),{multiArgs:true})
 
 # Environment
 process.env.PORT?= 59798
