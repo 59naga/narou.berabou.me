@@ -2,7 +2,7 @@ doctype html
 html
   head
     meta(charset="UTF-8")
-    title(ng-bind="title + 'narou.berabou.me'") DifficultHTTPServer
+    title(ng-bind="title + 'narou.berabou.me'") narou.berabou.me
     script(src=process.env.NODE_ENV=='production'? 'pkgs.min.js': 'pkgs.js')
     script(src="index.js")
     link(href="index.css" rel="stylesheet")
@@ -43,5 +43,5 @@ html
             p: small IE 10 で動作しますが、他のブラウザより挙動が不安定です。
             
             cite
-              a(href="javascript:location.href='http://localhost:59798/#/?url='+encodeURIComponent(location.href)" rel="sidebar" title="このリンクをお気にいりに登録し、縦書き変換したいページで実行すると、すぐに閲覧が可能です。" onClick="event.preventDefault();alert(this.title)") 縦書き変換ブックマークレット
+              a(href="javascript:location.href='http://narou.berabou.me/#/?url='+encodeURIComponent(location.href)" rel="sidebar" title="このリンクをお気にいりに登録し、縦書き変換したいページで実行すると、すぐに閲覧が可能です。" onClick="event.preventDefault();alert(this.title)") 縦書き変換ブックマークレット
               a(href="https://github.com/59naga/narou.berabou.me") fork me on github
