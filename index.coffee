@@ -138,6 +138,7 @@ app.config ($stateProvider)->
       if $stateParams.url
         decodedUrl= decodeURIComponent $stateParams.url
         [id,page,scrollX]= (normalizeUrl decodedUrl).split '/'
+        id?= 'unknown'
         scrollX?= 99999
 
         $state.go 'root.novel.page',{id,page,scrollX},{location:'replace'}
