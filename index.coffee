@@ -19,6 +19,14 @@ app.directive 'img',($state,$rootScope)->
     unless $rootScope.$storage.narou.artwork
       element.parent().replaceWith '<del>＜非表示にされた挿絵＞</del>'
 
+app.factory 'normalizeUrl',($window)->
+  (url)->
+    url
+      .replace /^(https?:\/\/)?ncode.syosetu.com\//,''
+      .replace /^(https?:\/\/)?novel18.syosetu.com\//,''
+      .replace $window.location.origin+'/#/',''
+      .replace /\/$/,''
+
 app.run ($window)->
   # http://stackoverflow.com/questions/22564167/window-location-origin-gives-wrong-path-when-using-ie
   $window.location.origin?=
@@ -110,13 +118,10 @@ app.run ($rootScope,$window,$timeout,$state)->
     # default left scroll for vertical 1 line
     enter event.shiftKey
 
-app.run ($rootScope,$localStorage,$window,$timeout,$state)->
+app.run ($rootScope,$localStorage,$window,$timeout,$state,normalizeUrl)->
   $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
-  $rootScope.read= (page)->
-    page= page.replace /^(https?:\/\/)?ncode.syosetu.com\//,''
-    page= page.replace /^(https?:\/\/)?novel18.syosetu.com\//,''
-    page= page.replace $window.location.origin+'/#/',''
-    [id,page,scrollX]= page.split '/'
+  $rootScope.read= (url)->
+    [id,page,scrollX]= (normalizeUrl url).split '/'
     page= 1 unless page
     scrollX= 99999 unless scrollX
 
@@ -127,14 +132,22 @@ app.config ($urlRouterProvider)->
 
 app.config ($stateProvider)->
   $stateProvider.state 'root',
-    url: '/'
+    url: '/?url'
     templateUrl: 'root.html'
+    controller: ($state,$stateParams,normalizeUrl)->
+      if $stateParams.url
+        decodedUrl= decodeURIComponent $stateParams.url
+        [id,page,scrollX]= (normalizeUrl decodedUrl).split '/'
+        scrollX?= 99999
+
+        $state.go 'root.novel.page',{id,page,scrollX},{location:'replace'}
+        return
 
 app.config ($stateProvider)->
   $stateProvider.state 'root.novel',
     url: ':id'
     template: '<div ui-view></div>'
-    controller: ($state,$window,$location)->
+    controller: ($state,$location)->
       return unless $state.current.name is 'root.novel'
 
       {id}= $state.params
