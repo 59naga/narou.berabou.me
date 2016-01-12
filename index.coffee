@@ -122,7 +122,7 @@ app.run ($rootScope,$localStorage,$window,$timeout,$state,normalizeUrl)->
   $rootScope.$storage= $localStorage.$default({narou:{page:'',artwork:true}})
   $rootScope.read= (url)->
     [id,page,scrollX]= (normalizeUrl url).split '/'
-    page= 1 unless page
+    # page= 1 unless page
     scrollX= 99999 unless scrollX
 
     $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
@@ -152,7 +152,7 @@ app.config ($stateProvider)->
       return unless $state.current.name is 'root.novel'
 
       {id}= $state.params
-      page= $location.search().page ? 1
+      page= $location.search().page# ? 1
       scrollX= 99999
 
       $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
@@ -161,10 +161,15 @@ app.config ($stateProvider)->
     url: '/:page?scrollX'
     templateProvider: ($q,$stateParams,$http,$rootScope,$window,toastr)->
       {id,page}= $stateParams
-      page= 1 unless page
+      # page= 1 unless page
 
       api= $window.location.origin+'/scrape/'
-      url= appDomain+id+'/'+page
+      url=
+        if page
+          appDomain+id+'/'+page
+        else
+          appDomain+id
+
       uri= api+url
 
       $http.get uri

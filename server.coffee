@@ -20,6 +20,9 @@ app.use '/scrape/',(req,res)->
     res.set 'Content-type','text/html'
     res.end body
 
+app.use (req,res)->
+  res.redirect '/#'+req.url.replace /\/$/,'?scrollX=99999' # Avoid "Cannot GET /n9669bk/1/"
+
 # Boot
 app.listen process.env.PORT,->
   console.log 'Server running at http://localhost:%s',process.env.PORT
