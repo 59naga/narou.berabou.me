@@ -173,7 +173,7 @@ form
   padding-right 1em
   
 // top left
-.novel_bn:last-child
+pager()
   writing-mode(horizontal-tb)
   
   display block
@@ -184,6 +184,9 @@ form
   
   a
     margin-right .5em
+    
+.novel_bn:last-child
+  pager()
 
 // top center
 #novel_no
@@ -260,4 +263,33 @@ form
   fixed false 50% .5em .5em
   overflow ellipsis
   font-size medium
+
+// for wayback-narou(old classes)
+.analog// 大中小
+  display none
+
+#novel_color .novel_pn
+  display none
+.novel_pn
+  font-size small
+  pager()
   
+.novel_pn + .novel_subtitle
+  overflow visible
+
+.novel_bar
+  writing-mode(horizontal-tb)
+
+  fixed false .5em .5em .5em
+  z-index 5
+  
+  font-size small
+  
+  text-align right
+  .novel_title2
+    width 50%
+    margin .25em 0
+    margin-left auto
+    margin-right .25em
+    display block
+    overflow ellipsis

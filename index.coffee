@@ -60,6 +60,12 @@ app.run ($rootScope,$window,$timeout,$state)->
       subtitle= (main.querySelector '.novel_subtitle')?.textContent
       chapterTitle= (main.querySelector '.chapter_title')?.textContent
 
+      isWayback= main.querySelector '.novel_pn'
+      if isWayback
+        title= main.querySelector('.novel_title2 a')?.textContent
+        subtitle= main.querySelector('.novel_subtitle').childNodes[1]?.textContent
+        chapterTitle= (main.querySelector('.novel_subtitle').childNodes[0])?.textContent
+
       $rootScope.title= ''
       if $state.current.name is 'root.novel.page'
         $rootScope.title+= subtitle+ ' ' if subtitle
@@ -199,6 +205,38 @@ app.config ($stateProvider)->
 
             else
               btn.parentNode.removeChild btn
+
+          # Add top button
+          topButton= document.createElement 'a'
+          topButton.textContent= '∧'
+          topButton.setAttribute 'ui-sref','root'
+          btns.appendChild topButton
+
+        # Wayback: Change navigation to narou.berabou.me
+        waybackBase= 'https://web.archive.org/'
+        isWayback= contents.querySelector '.novel_pn'
+        if isWayback
+          for a in contents.querySelectorAll 'a'
+            href= a.getAttribute('href')
+            if href[0] is '/'
+              absoluteHref= waybackBase+ href.slice 1
+              a.setAttribute 'href',absoluteHref
+
+          for btns in contents.querySelectorAll '.novel_pn'
+            for btn in btns.querySelectorAll 'a'
+              [id,page]= btn.getAttribute('href').split('/').slice(-3)
+
+              # re-sort next/prev navigator
+              if page.length && page>=0
+                btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:99999})"
+                if ~~page > ~~$stateParams.page
+                  btn.textContent= '＜次のページ(j)'
+                else
+                  btn.textContent= '前のページ(k)＞'
+                  btn.parentNode.appendChild btn
+
+              else
+                btn.parentNode.removeChild btn
 
           # Add top button
           topButton= document.createElement 'a'
