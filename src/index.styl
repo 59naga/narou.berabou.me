@@ -1,0 +1,63 @@
+@import 'kouto-swiss'
+@import '../node_modules/sanitize.css/lib/sanitize.styl'
+@import './mixins'
+@import './misc'
+
+meyer-reset()
+box-sizing-reset()
+
+liquid_background()
+misc()
+
+*
+  small_font()
+
+#narou
+  *
+    mincho()
+
+  .content
+    writing-mode()
+    paper()
+
+    min-width 100vw
+    // height calc(100vh \- 12rem)
+    height 100vh
+    padding 3em 2em
+    padding-bottom 12rem
+
+    medium_font()
+
+  footer
+    position fixed
+    bottom 0
+    width 100%
+    height 10rem
+
+    form
+      text-align center
+      span
+        display inline-block
+        margin 0 2em
+        medium_font()
+
+      button
+        xsmall_font()
+
+    .information
+      padding 1em
+      h1
+        margin .25em 0
+
+      h1
+        *
+          display inline-block
+          xsmall_font()
+        small:before
+          display inline-block
+          content 'by'
+          margin 0 .5em
+      h2
+        small_font()
+      h3
+        large_font()

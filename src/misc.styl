@@ -1,0 +1,50 @@
+misc()
+  button
+    cursor pointer
+
+    ruby
+      rt
+        font-size xx-small
+
+  button[disabled]
+    cursor not-allowed
+    opacity .25
+
+  a
+    color inherit
+    text-decoration underline
+
+  a,button
+    transition opacity .25s ease-in
+    &:hover
+      opacity .5
+
+  #page
+    position fixed
+    bottom 0
+    top -0.15em
+    right -0.1em
+    bottom 0
+    font-family Harenosora,serif
+    font-size 50vmin
+    opacity .05
+    text-align center
+    letter-spacing -0.05em
+
+  #logo
+    position fixed
+    bottom .25em
+    left 0
+    right .25em
+    opacity .1
+
+    text-align right
+    line-height 0.8
+
+    h1
+      color inherit
+      font-family Paddy
+      font-size 8rem
+      text-decoration none
+    p
+      font-size xx-small

@@ -1,0 +1,49 @@
+@font-face
+  font-family Paddy
+  font-style normal
+  src url(../fonts/Paddy.otf)
+
+@font-face
+  font-family Harenosora
+  font-style normal
+  src url(../fonts/Harenosora.otf)
+
+liquid_background()
+  html
+    overflow-y hidden// disable inline-block body whitespace
+  body
+    min-height 100vh
+    display inline-block// fix overflow background-color
+
+mincho()
+  font-family YuMincho,'游明朝','Yu Mincho','ヒラギノ明朝 Pro W3','Hiragino Mincho Pro',Meiryo,serif
+
+writing-mode(mode=vertical-rl)
+  -webkit-writing-mode mode
+  -moz-writing-mode mode
+  -o-writing-mode mode
+  writing-mode mode
+
+  -ms-writing-mode mode
+  if mode is vertical-rl
+    -ms-writing-mode tb-rl
+  else
+    -ms-writing-mode lr-tb
+
+  text-align justify
+  text-justify inter-ideograph
+
+  line-height 1.5
+
+xsmall_font()
+  font-size xx-small
+  font-size calc(100vmin \/ 60)
+small_font()
+  font-size medium
+  font-size calc(100vmin \/ 45)
+medium_font()
+  font-size large
+  font-size calc(100vmin \/ 40)
+large_font()
+  font-size x-large
+  font-size calc(100vmin \/ 30)
