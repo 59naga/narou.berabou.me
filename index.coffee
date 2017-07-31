@@ -41,7 +41,7 @@ app.run ($rootScope,$window,$timeout,$state)->
     $rootScope.$storage.narou.page= id
     $rootScope.$storage.narou.page+= '/'+page
     $rootScope.$storage.narou.page+= '/'+scrollX if scrollX
-  
+
   $rootScope.$on '$stateChangeStart',->
     saveScroll= off
 
@@ -53,7 +53,7 @@ app.run ($rootScope,$window,$timeout,$state)->
       contents= document.querySelector '#novel_honbun'
       if contents
         em= parseInt $window.getComputedStyle(document.querySelector('#novel_honbun'),null).getPropertyValue 'font-size'
-        
+
       # <title>
       main= document.querySelector 'main'
       title= main.querySelector('.contents1 a')?.textContent
@@ -73,7 +73,7 @@ app.run ($rootScope,$window,$timeout,$state)->
         $rootScope.title+= ' / ' if $rootScope.title
         $rootScope.title+= title if title
         $rootScope.title+= ' powered by ' if $rootScope.title
-        
+
       $window.scroll $state.params.scrollX,0
 
   timeout= null
@@ -88,6 +88,9 @@ app.run ($rootScope,$window,$timeout,$state)->
 
       $state.go $state.current.name,$state.params,{location:'replace'}
     ,50
+
+  $window.addEventListener 'mousewheel',(event)->
+    $window.scrollBy event.wheelDelta,0
 
   $window.addEventListener 'keydown',(event)->
     next= ->
@@ -120,7 +123,7 @@ app.run ($rootScope,$window,$timeout,$state)->
     return if event.keyCode in [27,16,17,18,91,37,39] # esc,tab,control,shift,option,command,←,→
     return next() if event.keyCode in [74,90] # j,z
     return prev() if event.keyCode in [75,88] # k,x
-    
+
     # default left scroll for vertical 1 line
     enter event.shiftKey
 
@@ -249,7 +252,7 @@ app.config ($stateProvider)->
         toc?.setAttribute 'href',appDomain.slice(0,-1)+(toc.getAttribute 'href')
 
         # .apology
-        contents.innerHTML+= '<div class="apology">このWEBサービスは非公式です。<br>株式会社ヒナプロジェクト様が提供しているものではありません。</div>' 
+        contents.innerHTML+= '<div class="apology">このWEBサービスは非公式です。<br>株式会社ヒナプロジェクト様が提供しているものではありません。</div>'
 
         contents.innerHTML
 
