@@ -89,8 +89,10 @@ app.run ($rootScope,$window,$timeout,$state)->
       $state.go $state.current.name,$state.params,{location:'replace'}
     ,50
 
-  $window.addEventListener 'mousewheel',(event)->
-    $window.scrollBy event.wheelDelta,0
+  $window.addEventListener 'wheel',(event)->
+    if event.deltaX == 0
+      $window.scrollBy -event.deltaY,0
+      event.preventDefault()
 
   $window.addEventListener 'keydown',(event)->
     next= ->
