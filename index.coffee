@@ -11,6 +11,7 @@ appDependencies= [
   'angular-loading-bar'
   'toastr'
 ]
+appDefaultScrollX= 999999 # for "n4006r/7"
 app= angular.module appName,appDependencies
 
 app.directive 'img',($state,$rootScope)->
@@ -96,12 +97,12 @@ app.run ($rootScope,$window,$timeout,$state)->
 
   $window.addEventListener 'keydown',(event)->
     next= ->
-      $state.params.scrollX= 99999
+      $state.params.scrollX= appDefaultScrollX
       $state.params.page++
       $state.go $state.current.name,$state.params,{reload:yes}
     prev= ->
       return if $state.params.page < 2
-      $state.params.scrollX= 99999
+      $state.params.scrollX= appDefaultScrollX
       $state.params.page--
       $state.go $state.current.name,$state.params,{reload:yes}
     enter= (left=yes)->
@@ -134,7 +135,7 @@ app.run ($rootScope,$localStorage,$window,$timeout,$state,normalizeUrl)->
   $rootScope.read= (url)->
     [id,page,scrollX]= (normalizeUrl url).split '/'
     # page= 1 unless page
-    scrollX= 99999 unless scrollX
+    scrollX= appDefaultScrollX unless scrollX
 
     $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
 
@@ -150,7 +151,7 @@ app.config ($stateProvider)->
         decodedUrl= decodeURIComponent $stateParams.url
         [id,page,scrollX]= (normalizeUrl decodedUrl).split '/'
         id?= 'unknown'
-        scrollX?= 99999
+        scrollX?= appDefaultScrollX
 
         $state.go 'root.novel.page',{id,page,scrollX},{location:'replace'}
         return
@@ -164,7 +165,7 @@ app.config ($stateProvider)->
 
       {id}= $state.params
       page= $location.search().page# ? 1
-      scrollX= 99999
+      scrollX= appDefaultScrollX
 
       $state.go 'root.novel.page',{id,page,scrollX},{reload:yes}
 
@@ -201,7 +202,7 @@ app.config ($stateProvider)->
 
             # re-sort next/prev navigator
             if page.length
-              btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:99999})"
+              btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:"+appDefaultScrollX+"})"
               if ~~page > ~~$stateParams.page
                 btn.textContent= '＜次のページ(j)'
               else
@@ -233,7 +234,7 @@ app.config ($stateProvider)->
 
               # re-sort next/prev navigator
               if page.length && page>=0
-                btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:99999})"
+                btn.setAttribute 'ui-sref',"root.novel.page({id:'"+id+"',page:'"+page+"',scrollX:"+appDefaultScrollX+"})"
                 if ~~page > ~~$stateParams.page
                   btn.textContent= '＜次のページ(j)'
                 else
