@@ -12,7 +12,7 @@ writing-mode(mode=vertical-rl)
   -moz-writing-mode mode
   -o-writing-mode mode
   writing-mode mode
-  
+
   -ms-writing-mode mode
   if mode is vertical-rl
     -ms-writing-mode tb-rl
@@ -21,7 +21,7 @@ writing-mode(mode=vertical-rl)
 
   text-align justify
   text-justify inter-ideograph
-  
+
   line-height 1.5
 
 // ngAnimate setting
@@ -32,7 +32,7 @@ body
 [ui-view]
   absolute 0 0 0 false
   z-index 500
-  
+
   &.ng-enter
     animation fadeIn .5s
   &.ng-leave
@@ -48,6 +48,11 @@ body
 .novel_bn
 .contents2//"ブックマークする場合はログインしてください。"
 #impression// 励ましのお便りフォーム
+  display none
+
+#toaster_success
+#toaster_error
+.narou_modal
   display none
 
 // Font
@@ -85,7 +90,7 @@ label
   opacity .5
 #novel_footer
   font-size xx-small
-  
+
 // Layouts
 .divide
   display flex
@@ -95,10 +100,10 @@ label
 // index
 form
   box-sizing-reset()
-  
+
   fixed 0 0 0 0
   z-index 5
-  
+
   margin auto
   width 20em
   height 14em
@@ -140,17 +145,17 @@ form
 #novel_color
   display inline-block
   writing-mode()
-  
+
   height 95% // Fix IE10
   padding 3em 5em
   padding-left 10em
-  
+
   img
     height 100%
   del
     text-decoration none
     opacity .5
-  
+
   // Fix IE10
   rb
     max-width 1em
@@ -166,33 +171,33 @@ form
   border-left 1px solid gray
   margin-left 1em
   padding-left 1em
-  
+
 // center left
 #novel_a
   border-right 1px solid gray
   margin-right 1em
   padding-right 1em
-  
+
 // top left
 pager()
   writing-mode(horizontal-tb)
-  
+
   display block
   height 1em
   fixed .5em false false .5em
   z-index 5
   padding-left 3em
-  
+
   a
     margin-right .5em
-    
+
 .novel_bn:last-child
   pager()
 
 // top center
 #novel_no
   writing-mode(horizontal-tb)
-  
+
   display inline-block
   fixed .5em .5em false .5em
   z-index 5
@@ -202,10 +207,10 @@ pager()
 #novel_footer
   fixed .5em .5em false 70%
   z-index 5
-  
+
   margin-top .25em
   line-height 1.5
-  
+
   text-align right
   *
     display inline-block
@@ -213,13 +218,13 @@ pager()
 // bottom left
 .chapter_title
   writing-mode(horizontal-tb)
-  
+
   absolute -1.25em false false 0
   text-align left
   display inline-block
 .novel_subtitle
   writing-mode(horizontal-tb)
-  
+
   fixed false 50% .25em .25em
   z-index 5
   overflow ellipsis
@@ -227,7 +232,7 @@ pager()
 // bottom center
 .apology
   writing-mode(horizontal-tb)
-  
+
   display inline-block
   font-size x-small
   fixed false .5em .5em .5em
@@ -238,7 +243,7 @@ pager()
 .contents1
   fixed false .5em .5em .5em
   z-index 5
-  
+
   text-align right
   a:first-of-type
     width 50%
@@ -256,10 +261,10 @@ pager()
 
 .novel_writername
   fixed false .5em .5em .5em
-  
+
   text-align right
   font-size small
-  
+
 .novel_title
   fixed false 50% .5em .5em
   overflow ellipsis
@@ -274,7 +279,7 @@ pager()
 .novel_pn
   font-size small
   pager()
-  
+
 .novel_pn + .novel_subtitle
   overflow visible
 
@@ -283,9 +288,9 @@ pager()
 
   fixed false .5em .5em .5em
   z-index 5
-  
+
   font-size small
-  
+
   text-align right
   .novel_title2
     width 50%
