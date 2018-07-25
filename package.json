@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "narou",
+  "scripts": {
+    "start": "node --experimental-modules index.mjs",
+    "format": "prettier \"*.mjs\" --write"
+  },
+  "dependencies": {
+    "compression": "^1.7.3",
+    "express": "^4.16.3",
+    "narou-middleware": "^0.1.0",
+    "request": "^2.87.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.13.7"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "engines": {
+    "node": "^8.11.3"
+  }
+}
